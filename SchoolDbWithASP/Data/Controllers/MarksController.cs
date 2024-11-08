@@ -56,7 +56,7 @@ public class MarksController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
 
             await _repository.CreateMarkAsync(mark);
@@ -80,7 +80,7 @@ public class MarksController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
             
             Mark? theMark = await _repository.UpdateMarkAsync(id, mark);

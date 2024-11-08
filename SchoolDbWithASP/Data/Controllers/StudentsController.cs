@@ -58,7 +58,7 @@ public class StudentsController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
 
             await _repository.CreateStudentAsync(student);
@@ -82,7 +82,7 @@ public class StudentsController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
             
             Student? stud = await _repository.UpdateStudentAsync(id, student);

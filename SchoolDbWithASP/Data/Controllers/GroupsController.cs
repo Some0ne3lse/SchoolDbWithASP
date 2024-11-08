@@ -29,7 +29,6 @@ public class GroupsController : ControllerBase
         }
     }
     
-    //-------------------------------------------
     
     [HttpGet]
     [Route("{id}")]
@@ -60,7 +59,7 @@ public class GroupsController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
             
             await _repository.CreateGroupAsync(group);
@@ -80,7 +79,7 @@ public class GroupsController : ControllerBase
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Invalid input. Please ensure all required fields are correctly filled out.");
             }
             
             Group? theGroup = await _repository.UpdateGroupAsync(id, group);

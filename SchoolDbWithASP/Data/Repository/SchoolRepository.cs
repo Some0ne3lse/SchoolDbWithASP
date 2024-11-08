@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolDbWithASP.Data.Interface;
 using SchoolDbWithASP.Models;
+using SchoolDbWithASP.Models.DTO;
 
 namespace SchoolDbWithASP.Data.Repository;
 
@@ -255,6 +256,105 @@ public class SchoolRepository : IRepository
             }
 
             db.Marks.Remove(markToDelete);
+            await db.SaveChangesAsync();
+            return true;
+        }
+    }
+
+    public async Task<List<Subject>> GetAllSubjectsAsync()
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Subjects.ToListAsync();
+        }
+    }
+
+    public async Task<Subject?> GetSubjectByIdAsync(int id)
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Subjects.Include(t => t.Teachers).Include(s => s.Marks).FirstOrDefaultAsync(x => x.Id == id);
+        }
+    }
+
+    public async Task CreateSubjectAsync(Subject subject, List<int>? teacherIds = null)
+    {
+        using (var db = _dbContext)
+        {
+            if (teacherIds != null && teacherIds.Any())
+            {
+                var teachers = await db.Teachers.Where(t => teacherIds.Contains(t.Id)).ToListAsync();
+                
+                if (teachers.Count != teacherIds.Count)
+                {
+                    throw new InvalidOperationException("One or more specified teachers do not exist.");
+                }
+
+                subject.Teachers.AddRange(teachers);
+            }
+
+            await db.Subjects.AddAsync(subject);
+            await db.SaveChangesAsync();
+        }
+    }
+
+    public async Task<Subject?> UpdateSubjectAsync(int id, SubjectDto subjectDto)
+    {
+        using (var db = _dbContext)
+        {
+            var subjectToUpdate = await db.Subjects.Include(s => s.Teachers).FirstOrDefaultAsync(s => s.Id == id);
+
+            if (subjectToUpdate == null)
+            {
+                return null;
+            }
+            
+            subjectToUpdate.Title = subjectDto.Title;
+            
+            if (subjectDto.TeacherIds != null)
+            {
+                var teachers = await db.Teachers.Where(t => subjectDto.TeacherIds.Contains(t.Id)).ToListAsync();
+
+                if (teachers.Count != subjectDto.TeacherIds.Count)
+                {
+                    throw new InvalidOperationException("One or more specified teachers do not exist.");
+                }
+
+                subjectToUpdate.Teachers.Clear();
+                subjectToUpdate.Teachers.AddRange(teachers);
+            }
+
+            await db.SaveChangesAsync();
+            return subjectToUpdate;
+        }
+    }
+
+    public async Task<bool> DeleteSubjectAsync(int id)
+    {
+        Subject? subjectToDelete;
+
+        using (var db = _dbContext)
+        {
+            subjectToDelete = await db.Subjects
+                .Include(s => s.Marks)
+                .Include(s => s.Teachers)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (subjectToDelete == null)
+            {
+                return false;
+            }
+            
+            // I was very unsure about this part. On one hand, deleting the subject without deleting the marks makes
+            // sense, but how do you know what the mark you got was for?
+            if (subjectToDelete.Marks.Any())
+            {
+                throw new InvalidOperationException("Cannot delete a subject that has associated marks.");
+            }
+
+            subjectToDelete.Teachers.Clear();
+
+            db.Subjects.Remove(subjectToDelete);
             await db.SaveChangesAsync();
             return true;
         }

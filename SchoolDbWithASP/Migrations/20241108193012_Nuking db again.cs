@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolDbWithASP.Migrations
 {
     /// <inheritdoc />
-    public partial class Fixoptionalparametersandnukedb : Migration
+    public partial class Nukingdbagain : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -176,8 +176,8 @@ namespace SchoolDbWithASP.Migrations
                 columns: new[] { "Id", "Date", "MarkReceived", "StudentId", "SubjectId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9820), 85, 1, 1 },
-                    { 2, new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9840), 90, 2, 2 }
+                    { 1, new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9390), 85, 1, 1 },
+                    { 2, new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9400), 90, 2, 2 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,4 +1,5 @@
 using SchoolDbWithASP.Models;
+using SchoolDbWithASP.Models.DTO;
 
 namespace SchoolDbWithASP.Data.Interface;
 
@@ -35,4 +36,15 @@ public interface IRepository
     Task<Mark?> UpdateMarkAsync(int id, Mark mark);
 
     Task<bool> DeleteMarkAsync(int id);
+    
+    Task<List<Subject>> GetAllSubjectsAsync();
+
+    Task<Subject?> GetSubjectByIdAsync(int id);
+
+    Task CreateSubjectAsync(Subject subject, List<int>? teacherId = null);
+
+    Task<Subject?> UpdateSubjectAsync(int id, SubjectDto subjectDto);
+
+    Task<bool> DeleteSubjectAsync(int id);
+    
 }

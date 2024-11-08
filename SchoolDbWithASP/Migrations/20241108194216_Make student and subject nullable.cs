@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolDbWithASP.Migrations
 {
     /// <inheritdoc />
-    public partial class Nukingdbagain : Migration
+    public partial class Makestudentandsubjectnullable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,14 +16,14 @@ namespace SchoolDbWithASP.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "Date",
-                value: new DateTime(2024, 11, 8, 19, 29, 18, 383, DateTimeKind.Local).AddTicks(4510));
+                value: new DateTime(2024, 11, 8, 19, 42, 16, 426, DateTimeKind.Local).AddTicks(9860));
 
             migrationBuilder.UpdateData(
                 table: "Marks",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "Date",
-                value: new DateTime(2024, 11, 8, 19, 29, 18, 383, DateTimeKind.Local).AddTicks(4540));
+                value: new DateTime(2024, 11, 8, 19, 42, 16, 426, DateTimeKind.Local).AddTicks(9870));
         }
 
         /// <inheritdoc />
@@ -34,14 +34,14 @@ namespace SchoolDbWithASP.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "Date",
-                value: new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9820));
+                value: new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9390));
 
             migrationBuilder.UpdateData(
                 table: "Marks",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "Date",
-                value: new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9840));
+                value: new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9400));
         }
     }
 }

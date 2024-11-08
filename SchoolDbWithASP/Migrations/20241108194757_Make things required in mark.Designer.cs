@@ -11,8 +11,8 @@ using SchoolDbWithASP.Data;
 namespace SchoolDbWithASP.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20241108145917_Fix optional parameters and nuke db")]
-    partial class Fixoptionalparametersandnukedb
+    [Migration("20241108194757_Make things required in mark")]
+    partial class Makethingsrequiredinmark
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9820),
+                            Date = new DateTime(2024, 11, 8, 19, 47, 57, 637, DateTimeKind.Local).AddTicks(6880),
                             MarkReceived = 85,
                             StudentId = 1,
                             SubjectId = 1
@@ -86,7 +86,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9840),
+                            Date = new DateTime(2024, 11, 8, 19, 47, 57, 637, DateTimeKind.Local).AddTicks(6890),
                             MarkReceived = 90,
                             StudentId = 2,
                             SubjectId = 2

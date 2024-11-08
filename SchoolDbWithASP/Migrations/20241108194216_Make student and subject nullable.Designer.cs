@@ -11,8 +11,8 @@ using SchoolDbWithASP.Data;
 namespace SchoolDbWithASP.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20241108192918_Nuking db again")]
-    partial class Nukingdbagain
+    [Migration("20241108194216_Make student and subject nullable")]
+    partial class Makestudentandsubjectnullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 11, 8, 19, 29, 18, 383, DateTimeKind.Local).AddTicks(4510),
+                            Date = new DateTime(2024, 11, 8, 19, 42, 16, 426, DateTimeKind.Local).AddTicks(9860),
                             MarkReceived = 85,
                             StudentId = 1,
                             SubjectId = 1
@@ -86,7 +86,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 11, 8, 19, 29, 18, 383, DateTimeKind.Local).AddTicks(4540),
+                            Date = new DateTime(2024, 11, 8, 19, 42, 16, 426, DateTimeKind.Local).AddTicks(9870),
                             MarkReceived = 90,
                             StudentId = 2,
                             SubjectId = 2

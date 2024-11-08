@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolDbWithASP.Data;
 
@@ -10,9 +11,11 @@ using SchoolDbWithASP.Data;
 namespace SchoolDbWithASP.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108193012_Nuking db again")]
+    partial class Nukingdbagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -75,7 +78,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 11, 8, 19, 47, 57, 637, DateTimeKind.Local).AddTicks(6880),
+                            Date = new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9390),
                             MarkReceived = 85,
                             StudentId = 1,
                             SubjectId = 1
@@ -83,7 +86,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 11, 8, 19, 47, 57, 637, DateTimeKind.Local).AddTicks(6890),
+                            Date = new DateTime(2024, 11, 8, 19, 30, 11, 997, DateTimeKind.Local).AddTicks(9400),
                             MarkReceived = 90,
                             StudentId = 2,
                             SubjectId = 2
