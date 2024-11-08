@@ -15,14 +15,19 @@ public class SchoolRepository : IRepository
 
     public async Task<List<Student>> GetAllStudentsAsync()
     {
-        List<Student> students;
 
         using (var db = _dbContext)
         {
-            // Check if you need to include lists here!!!
-            students = await db.Students.Include(g => g.Group).Include(m => m.Marks).ToListAsync();
+            return await db.Students.Include(g => g.Group).Include(m => m.Marks).ToListAsync();
+            
+        }
+    }
 
-            return students;
+    public async Task<Student?> GetStudentByIdAsync(int id)
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Students.Include(g => g.Group).Include(m => m.Marks).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

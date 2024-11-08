@@ -28,5 +28,27 @@ public class StudentsController : ControllerBase
             return StatusCode(500);
         }
     }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<ActionResult<Student>> GetStudentById(int id)
+    {
+        try
+        {
+            Student? stud = await _repository.GetStudentByIdAsync(id);
+            if (stud == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(stud);
+            }
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
     
 }
