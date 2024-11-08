@@ -4,44 +4,46 @@ using SchoolDbWithASP.Models;
 
 namespace SchoolDbWithASP.Data.Controllers;
 
-[Route("api/students")]
+[Route("api/groups")]
 [Controller]
-public class StudentsController : ControllerBase
+public class GroupsController : ControllerBase
 {
     private readonly IRepository _repository;
 
-    public StudentsController(IRepository repository)
+    public GroupsController(IRepository repository)
     {
         _repository = repository;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Student>>> GetAllStudents()
+    public async Task<ActionResult<List<Group>>> GetAllGroups()
     {
         try
         {
-            List<Student> students = await _repository.GetAllStudentsAsync();
-            return Ok(students);
+            List<Group> groups = await _repository.GetAllGroupsAsync();
+            return Ok(groups);
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
-
+    
+    //-------------------------------------------
+    
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<Student>> GetStudentById(int id)
+    public async Task<ActionResult<Group>> GetGroupById(int id)
     {
         try
         {
-            Student? stud = await _repository.GetStudentByIdAsync(id);
-            if (stud == null)
+            Group? theGroup = await _repository.GetGroupByIdAsync(id);
+            if (theGroup == null)
             {
                 return NotFound();
-            } 
+            }
             
-            return Ok(stud);
+            return Ok(theGroup);
             
         }
         catch (Exception)
@@ -52,7 +54,7 @@ public class StudentsController : ControllerBase
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateStudent([FromBody] Student student)
+    public async Task<IActionResult> CreateGroup([FromBody] Group group)
     {
         try
         {
@@ -61,8 +63,8 @@ public class StudentsController : ControllerBase
                 return BadRequest(ModelState);
             }
             
-            await _repository.CreateStudentAsync(student);
-            return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, student);
+            await _repository.CreateGroupAsync(group);
+            return CreatedAtAction(nameof(GetGroupById), new { id = group.Id }, group);
         }
         catch (Exception)
         {
@@ -72,7 +74,7 @@ public class StudentsController : ControllerBase
 
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult<Student>> UpdateStudent(int id, [FromBody] Student student)
+    public async Task<ActionResult<Group>> UpdateGroup(int id, [FromBody] Group group)
     {
         try
         {
@@ -81,14 +83,14 @@ public class StudentsController : ControllerBase
                 return BadRequest(ModelState);
             }
             
-            Student? stud = await _repository.UpdateStudentAsync(id, student);
+            Group? theGroup = await _repository.UpdateGroupAsync(id, group);
 
-            if (stud == null)
+            if (theGroup == null)
             {
                 return NotFound();
             }
 
-            return Ok(stud);
+            return Ok(theGroup);
 
         }
         catch (Exception)
@@ -99,23 +101,26 @@ public class StudentsController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> DeleteStudent(int id)
+    public async Task<IActionResult> DeleteGroup(int id)
     {
         try
         {
-            bool deleteSuccessful = await _repository.DeleteStudentAsync(id);
+            bool deleteSuccessful = await _repository.DeleteGroupAsync(id);
             if (!deleteSuccessful)
             {
                 return NotFound();
             }
-            
+
             return NoContent();
-            
+
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict("Cannot delete this group because it has associated students.");
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
-    
 }

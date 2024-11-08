@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolDbWithASP.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Fixoptionalparametersandnukedb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,7 @@ namespace SchoolDbWithASP.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    GroupId = table.Column<int>(type: "INTEGER", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -70,8 +70,7 @@ namespace SchoolDbWithASP.Migrations
                         name: "FK_Students_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -177,8 +176,8 @@ namespace SchoolDbWithASP.Migrations
                 columns: new[] { "Id", "Date", "MarkReceived", "StudentId", "SubjectId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 8, 13, 26, 5, 858, DateTimeKind.Local).AddTicks(9210), 85, 1, 1 },
-                    { 2, new DateTime(2024, 11, 8, 13, 26, 5, 858, DateTimeKind.Local).AddTicks(9230), 90, 2, 2 }
+                    { 1, new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9820), 85, 1, 1 },
+                    { 2, new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9840), 90, 2, 2 }
                 });
 
             migrationBuilder.CreateIndex(

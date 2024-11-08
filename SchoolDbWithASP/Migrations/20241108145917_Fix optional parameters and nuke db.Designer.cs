@@ -11,8 +11,8 @@ using SchoolDbWithASP.Data;
 namespace SchoolDbWithASP.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20241108132606_Init")]
-    partial class Init
+    [Migration("20241108145917_Fix optional parameters and nuke db")]
+    partial class Fixoptionalparametersandnukedb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 11, 8, 13, 26, 5, 858, DateTimeKind.Local).AddTicks(9210),
+                            Date = new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9820),
                             MarkReceived = 85,
                             StudentId = 1,
                             SubjectId = 1
@@ -86,7 +86,7 @@ namespace SchoolDbWithASP.Migrations
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 11, 8, 13, 26, 5, 858, DateTimeKind.Local).AddTicks(9230),
+                            Date = new DateTime(2024, 11, 8, 14, 59, 17, 394, DateTimeKind.Local).AddTicks(9840),
                             MarkReceived = 90,
                             StudentId = 2,
                             SubjectId = 2
@@ -104,7 +104,7 @@ namespace SchoolDbWithASP.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -253,9 +253,7 @@ namespace SchoolDbWithASP.Migrations
                 {
                     b.HasOne("SchoolDbWithASP.Models.Group", "Group")
                         .WithMany("Students")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.Navigation("Group");
                 });
