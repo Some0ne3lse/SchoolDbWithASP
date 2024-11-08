@@ -4,24 +4,24 @@ using SchoolDbWithASP.Models;
 
 namespace SchoolDbWithASP.Data.Controllers;
 
-[Route("api/students")]
+[Route("api/marks")]
 [Controller]
-public class StudentsController : ControllerBase
+public class MarksController : ControllerBase
 {
     private readonly IRepository _repository;
 
-    public StudentsController(IRepository repository)
+    public MarksController(IRepository repository)
     {
         _repository = repository;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Student>>> GetAllStudents()
+    public async Task<ActionResult<List<Mark>>> GetAllMarks()
     {
         try
         {
-            List<Student> students = await _repository.GetAllStudentsAsync();
-            return Ok(students);
+            List<Mark> marks = await _repository.GetAllMarksAsync();
+            return Ok(marks);
         }
         catch (Exception)
         {
@@ -31,28 +31,26 @@ public class StudentsController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<Student>> GetStudentById(int id)
+    public async Task<ActionResult<Mark>> GetMarkById(int id)
     {
         try
         {
-            Student? stud = await _repository.GetStudentByIdAsync(id);
-            if (stud == null)
+            Mark? theMark = await _repository.GetMarkByIdAsync(id);
+            if (theMark == null)
             {
                 return NotFound();
-            } 
-            
-            return Ok(stud);
-            
+            }
+
+            return Ok(theMark);
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
-
 
     [HttpPost]
-    public async Task<IActionResult> CreateStudent([FromBody] Student student)
+    public async Task<IActionResult> CreateMark([FromBody] Mark mark)
     {
         try
         {
@@ -61,22 +59,22 @@ public class StudentsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            await _repository.CreateStudentAsync(student);
-            return CreatedAtAction(nameof(GetStudentById), new { id = student.Id }, student);
+            await _repository.CreateMarkAsync(mark);
+            return CreatedAtAction(nameof(GetMarkById), new { id = mark.Id }, mark);
         }
-        catch (InvalidOperationException)
+        catch(InvalidOperationException)
         {
-            return BadRequest("The group does not exist");
+            return BadRequest("The student or subject doesn't exist");
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
-
+    
     [HttpPut]
     [Route("{id}")]
-    public async Task<ActionResult<Student>> UpdateStudent(int id, [FromBody] Student student)
+    public async Task<ActionResult<Mark>> UpdateMark(int id, [FromBody] Mark mark)
     {
         try
         {
@@ -85,33 +83,33 @@ public class StudentsController : ControllerBase
                 return BadRequest(ModelState);
             }
             
-            Student? stud = await _repository.UpdateStudentAsync(id, student);
+            Mark? theMark = await _repository.UpdateMarkAsync(id, mark);
 
-            if (stud == null)
+            if (theMark == null)
             {
                 return NotFound();
             }
 
-            return Ok(stud);
+            return Ok(theMark);
 
         }
         catch (InvalidOperationException)
         {
-            return BadRequest("The group does not exist");
+            return BadRequest("The student or subject does not exist");
         }
         catch (Exception)
         {
             return StatusCode(500);
         }
     }
-
+    
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> DeleteStudent(int id)
+    public async Task<IActionResult> DeleteMark(int id)
     {
         try
         {
-            bool deleteSuccessful = await _repository.DeleteStudentAsync(id);
+            bool deleteSuccessful = await _repository.DeleteMarkAsync(id);
             if (!deleteSuccessful)
             {
                 return NotFound();

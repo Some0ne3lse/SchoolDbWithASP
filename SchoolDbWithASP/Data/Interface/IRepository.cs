@@ -24,4 +24,15 @@ public interface IRepository
     Task<Group?> UpdateGroupAsync(int id, Group group);
 
     Task<bool> DeleteGroupAsync(int id);
+    
+    
+    Task<List<Mark>> GetAllMarksAsync();
+    
+    Task<Mark?> GetMarkByIdAsync(int id);
+
+    Task CreateMarkAsync(Mark mark);
+
+    Task<Mark?> UpdateMarkAsync(int id, Mark mark);
+
+    Task<bool> DeleteMarkAsync(int id);
 }

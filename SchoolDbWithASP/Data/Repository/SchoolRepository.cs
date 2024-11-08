@@ -35,6 +35,14 @@ public class SchoolRepository : IRepository
     {
         using (var db = _dbContext)
         {
+            if (student.GroupId.HasValue)
+            {
+                var groupExists = await db.Groups.AnyAsync(g => g.Id == student.GroupId.Value);
+                if (!groupExists)
+                {
+                    throw new InvalidOperationException("The specified group does not exist");
+                }
+            }
             await db.Students.AddAsync(student);
             await db.SaveChangesAsync();
         }
@@ -53,6 +61,16 @@ public class SchoolRepository : IRepository
                 return null;
             }
 
+            if (student.GroupId.HasValue)
+            {
+                var groupExists = await db.Groups.AnyAsync(g => g.Id == student.GroupId.Value);
+                if (!groupExists)
+                {
+                    throw new InvalidOperationException("Associated Group not found.");
+                }
+            }
+            
+            
             studentToUpdate.FirstName = student.FirstName;
             studentToUpdate.LastName = student.LastName;
             studentToUpdate.GroupId = student.GroupId;
@@ -149,6 +167,94 @@ public class SchoolRepository : IRepository
             }
 
             db.Groups.Remove(groupToDelete);
+            await db.SaveChangesAsync();
+            return true;
+        }
+    }
+
+    public async Task<List<Mark>> GetAllMarksAsync()
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Marks.Include(s => s.Student).ToListAsync();
+        }
+    }
+
+    public async Task<Mark?> GetMarkByIdAsync(int id)
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Marks.Include(s => s.Student).Include(s => s.Subject).FirstOrDefaultAsync(x => x.Id == id);
+        }
+    }
+
+    public async Task CreateMarkAsync(Mark mark)
+    {
+        using (var db = _dbContext)
+        {
+            var studentExists = await db.Students.AnyAsync(s => s.Id == mark.StudentId);
+            if (!studentExists)
+            {
+                throw new InvalidOperationException("The student does not exist");
+            }
+
+            var subjectExists = await db.Subjects.AnyAsync(s => s.Id == mark.SubjectId);
+            if (!subjectExists)
+            {
+                throw new InvalidOperationException("The subject does not exist");
+            }
+            
+            await db.Marks.AddAsync(mark);
+            await db.SaveChangesAsync();
+        }
+    }
+
+    public async Task<Mark?> UpdateMarkAsync(int id, Mark mark)
+    {
+        Mark? markToUpdate;
+
+        using (var db = _dbContext)
+        {
+            markToUpdate = await db.Marks.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (markToUpdate == null)
+            {
+                return null;
+            }
+            
+            var studentExists = await db.Students.AnyAsync(s => s.Id == mark.StudentId);
+            var subjectExists = await db.Subjects.AnyAsync(s => s.Id == mark.SubjectId);
+    
+            if (!studentExists || !subjectExists)
+            {
+                throw new InvalidOperationException("Associated Student or Subject not found.");
+            }
+
+            markToUpdate.Date = mark.Date;
+            markToUpdate.MarkReceived = mark.MarkReceived;
+            markToUpdate.StudentId = mark.StudentId;
+            markToUpdate.SubjectId = mark.SubjectId;
+
+            await db.SaveChangesAsync();
+
+            return markToUpdate;
+        }
+    }
+
+    public async Task<bool> DeleteMarkAsync(int id)
+    {
+        Mark? markToDelete;
+
+        using (var db = _dbContext)
+        {
+            markToDelete = await db.Marks.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (markToDelete == null)
+            {
+                return false;
+            }
+
+            db.Marks.Remove(markToDelete);
             await db.SaveChangesAsync();
             return true;
         }
