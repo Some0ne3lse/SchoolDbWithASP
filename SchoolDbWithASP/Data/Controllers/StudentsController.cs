@@ -120,6 +120,10 @@ public class StudentsController : ControllerBase
             return NoContent();
             
         }
+        catch (InvalidOperationException)
+        {
+            return Conflict("Cannot delete a student that has associated marks.");
+        }
         catch (Exception)
         {
             return StatusCode(500);

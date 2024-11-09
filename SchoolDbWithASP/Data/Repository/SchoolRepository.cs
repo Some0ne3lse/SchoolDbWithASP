@@ -88,13 +88,18 @@ public class SchoolRepository : IRepository
 
         using (var db = _dbContext)
         {
-            studentToDelete = await db.Students.FirstOrDefaultAsync(s => s.Id == id);
+            studentToDelete = await db.Students.Include(student => student.Marks).FirstOrDefaultAsync(s => s.Id == id);
 
             if (studentToDelete == null)
             {
                 return false;
             }
-
+            
+            if (studentToDelete.Marks.Any())
+            {
+                throw new InvalidOperationException("Cannot delete a student with associated marks. Please delete the marks first.");
+            }
+            
             db.Students.Remove(studentToDelete);
             await db.SaveChangesAsync();
             return true;
