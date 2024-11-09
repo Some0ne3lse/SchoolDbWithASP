@@ -47,4 +47,14 @@ public interface IRepository
 
     Task<bool> DeleteSubjectAsync(int id);
     
+    Task<List<Teacher>> GetAllTeachersAsync();
+
+    Task<Teacher?> GetTeacherByIdAsync(int id);
+
+    Task CreateTeacherAsync(Teacher teacher, List<int>? subjectIds = null);
+
+    Task<Teacher?> UpdateTeacherAsync(int id, TeacherDto teacherDto);
+
+    Task<bool> DeleteTeacherAsync(int id);
+    
 }

@@ -364,4 +364,96 @@ public class SchoolRepository : IRepository
             return true;
         }
     }
+
+    public async Task<List<Teacher>> GetAllTeachersAsync()
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Teachers.ToListAsync();
+        }
+    }
+
+    public async Task<Teacher?> GetTeacherByIdAsync(int id)
+    {
+        using (var db = _dbContext)
+        {
+            return await db.Teachers.Include(s => s.Subjects).FirstOrDefaultAsync(x => x.Id == id);
+        }
+    }
+
+    public async Task CreateTeacherAsync(Teacher teacher, List<int>? subjectIds = null)
+{
+    using (var db = _dbContext)
+    {
+        if (subjectIds != null && subjectIds.Any())
+        {
+            var subjects = await db.Subjects.Where(s => subjectIds.Contains(s.Id)).ToListAsync();
+
+            if (subjects.Count != subjectIds.Count)
+            {
+                throw new InvalidOperationException("One or more specified subjects do not exist. Subjects is a list");
+            }
+
+            teacher.Subjects.AddRange(subjects);
+        }
+
+        await db.Teachers.AddAsync(teacher);
+        await db.SaveChangesAsync();
+    }
+}
+
+    public async Task<Teacher?> UpdateTeacherAsync(int id, TeacherDto teacherDto)
+    {
+        using (var db = _dbContext)
+        {
+            var teacherToUpdate = await db.Teachers.Include(t => t.Subjects).FirstOrDefaultAsync(t => t.Id == id);
+
+            if (teacherToUpdate == null)
+            {
+                return null;
+            }
+            
+            teacherToUpdate.FirstName = teacherDto.FirstName;
+            teacherToUpdate.LastName = teacherDto.LastName;
+            
+            if (teacherDto.SubjectIds != null)
+            {
+                var subjects = await db.Subjects.Where(s => teacherDto.SubjectIds.Contains(s.Id)).ToListAsync();
+
+                if (subjects.Count != teacherDto.SubjectIds.Count)
+                {
+                    throw new InvalidOperationException("One or more specified subjects do not exist.");
+                }
+                
+                teacherToUpdate.Subjects.Clear();
+                teacherToUpdate.Subjects.AddRange(subjects);
+            }
+
+            await db.SaveChangesAsync();
+            return teacherToUpdate;
+        }
+    }
+
+    public async Task<bool> DeleteTeacherAsync(int id)
+    {
+        Teacher? teacherToDelete;
+
+        using (var db = _dbContext)
+        {
+            teacherToDelete = await db.Teachers
+                .Include(t => t.Subjects)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (teacherToDelete == null)
+            {
+                return false;
+            }
+            
+            teacherToDelete.Subjects.Clear();
+            
+            db.Teachers.Remove(teacherToDelete);
+            await db.SaveChangesAsync();
+            return true;
+        }
+    }
 }
